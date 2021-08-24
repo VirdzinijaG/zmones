@@ -12,13 +12,17 @@ const port = 3000;
 app.use(express.static("web")); // tikrina ar web direktorijoje yra failai, pats automatiskai perskaito
 app.use(express.json()); // ateina duomenys json 
 
-app.get("/", async (req, res) => {
+app.get("/zmones", async (req, res) => {
     res.type("text/html");
     try {
-        const zmones = getZmones(); // gaunamas sarasas
+        const zmones = await getZmones(); // gaunamas sarasas
         res.render("zmones", { zmones }); // nusiunciamas sarasas i narsykle
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
+});
+
+app.listen(port, () => { // narsykles port
+    console.log(`Example app listening at http://localhost:${port}`);
 });

@@ -57,7 +57,7 @@ async function getZmones() {
     try {
         conn = await dbConnect();
         let r = await dbQuery(conn, "select id, vardas, pavarde, gim_data as gimimoData, alga from zmones"); // duomenu paemimas is duomenu bazes
-        console.log(r.results);
+        // console.log(r.results);
         return r.results;
     } finally {
         try {
