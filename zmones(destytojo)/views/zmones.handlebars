@@ -1,0 +1,22 @@
+<a href="/zmones/naujas">Naujas</a>
+<table>
+{{#each zmones}}
+    <tr>
+        <td>
+            {{this.vardas}}
+        </td>
+        <td>
+            {{this.pavarde}}
+        </td>
+        <td>
+            {{dateFormat this.gimimoData}}
+        </td>
+        <td>
+            {{this.alga}}
+        </td>
+        <td>
+            <a href="/zmones/{{this.id}}">edit</a>
+        </td>
+    </tr>
+{{/each}}
+</table>
