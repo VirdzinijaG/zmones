@@ -67,4 +67,54 @@ async function getZmones() {
     }
 }
 
-export { getZmones };
+async function getZmogus(id) {
+    id = parseInt(id);
+    if (isFinite(id)) {
+        let conn;
+        try {
+            conn = await dbConnect();
+            let r = await dbQuery(
+                conn,
+                "select id, vardas, pavarde, gim_data as gimimoData, alga from zmones where id = ?",
+                [id],
+            );
+            return r.results;
+        } finally {
+            try {
+                await dbDisconnect(conn);
+            } catch (err) {
+            }
+        }
+    } else {
+        throw new Error("Bad id");
+    }
+}
+
+async function saveZmogus(id, vardas, pavarde, gimimoData, alga) {
+    let conn;
+    try {
+        conn = await dbConnect();
+        if (id) { // jei id yra atnaujina duomenys
+            let r = await dbQuery(
+                conn,
+                "update zmones set vardas = ?, pavarde = ?, gim_data = ?, alga = ? where id = ?;",
+                [vardas, pavarde, gimimoData, alga, id],
+            );
+            return r.results;
+        } else { // jei id nera sukuria nauja informacija
+            let r = await dbQuery(
+                conn,
+                "insert into zmones (vardas, pavarde, gim_data, alga) values (?, ?, ?, ?);",
+                [vardas, pavarde, gimimoData, alga],
+            );
+            return r.results;
+        }
+    } finally {
+        try {
+            await dbDisconnect(conn);
+        } catch (err) {
+        }
+    }
+}
+
+export { getZmones, getZmogus, saveZmogus };
