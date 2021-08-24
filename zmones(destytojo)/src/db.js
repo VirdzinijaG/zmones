@@ -122,4 +122,114 @@ async function saveZmogus(id, vardas, pavarde, gimimoData, alga) {
   }
 }
 
-export { getZmogus, getZmones, saveZmogus };
+async function deleteZmogus(id) {
+  id = parseInt(id);
+  if (isFinite(id)) {
+    let conn;
+    try {
+      conn = await dbConnect();
+      let r = await dbQuery(
+        conn,
+        "delete from zmones where id = ?",
+        [id],
+      );
+    } finally {
+      try {
+        await dbDisconnect(conn);
+      } catch (err) {
+        // ignored
+      }
+    }
+  } else {
+    throw new Error("Bad id");
+  }
+}
+
+async function getKontaktai(zmogusId) {
+  zmogusId = parseInt(zmogusId);
+  if (isFinite(zmogusId)) {
+    let conn;
+    try {
+      conn = await dbConnect();
+      let r = await dbQuery(
+        conn,
+        "select id, tipas, reiksme from kontaktai where zmones_id = ?",
+        [zmogusId],
+      );
+      return r.results;
+    } finally {
+      try {
+        await dbDisconnect(conn);
+      } catch (err) {
+        // ignored
+      }
+    }
+  } else {
+    throw new Error("Bad id");
+  }
+}
+
+async function getKontaktas(id, zmogusId) {
+  id = parseInt(id);
+  if (!isFinite(id)) {
+    throw new Error("Bad id");
+  }
+  zmogusId = parseInt(zmogusId);
+  if (!isFinite(zmogusId)) {
+    throw new Error("Bad zmogusId");
+  }
+  let conn;
+  try {
+    conn = await dbConnect();
+    let r = await dbQuery(
+      conn,
+      "select id, tipas, reiksme from kontaktai where id = ? and zmones_id = ?",
+      [id, zmogusId],
+    );
+    return r.results;
+  } finally {
+    try {
+      await dbDisconnect(conn);
+    } catch (err) {
+      // ignored
+    }
+  }
+}
+
+async function saveKontaktas(id, zmogusId, tipas, reiksme) {
+  let conn;
+  try {
+    conn = await dbConnect();
+    if (id) {
+      let r = await dbQuery(
+        conn,
+        "update kontaktai set tipas = ?, reiksme = ? where id = ? and zmones_id = ?;",
+        [tipas, reiksme, id, zmogusId],
+      );
+      return r.results;
+    } else {
+      let r = await dbQuery(
+        conn,
+        "insert into kontaktai (zmones_id, tipas, reiksme) values (?, ?, ?);",
+        [zmogusId, tipas, reiksme],
+      );
+      return r.results;
+    }
+  } finally {
+    try {
+      await dbDisconnect(conn);
+    } catch (err) {
+      // ignored
+    }
+  }
+}
+
+export {
+  deleteZmogus,
+  getKontaktai,
+  getKontaktas,
+  getZmogus,
+  getZmones,
+  saveKontaktas,
+  saveZmogus,
+};
