@@ -139,7 +139,7 @@ async function deleteZmogus(id) {
     }
 }
 
-async function getKontaktai(zmogusId) { 
+async function getKontaktai(zmogusId) {
     zmogusId = parseInt(zmogusId);
     if (isFinite(zmogusId)) {
         let conn;
@@ -162,4 +162,30 @@ async function getKontaktai(zmogusId) {
     }
 }
 
-export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai };
+async function getKontaktas(id, zmogusId) {
+    id = parseInt(id);
+    if (!isFinite(id)) {
+        throw new Error("Bad id");
+    }
+    zmogusId = parseInt(zmogusId);
+    if (!isFinite(zmogusId)) {
+        throw new Error("Bad zmogusId");
+    }
+    let conn;
+    try {
+        conn = await dbConnect();
+        let r = await dbQuery(
+            conn,
+            "select id, tipas, reiksme from kontaktai where id = ? and zmones_id = ?",
+            [id, zmogusId],
+        );
+        return r.results;
+    } finally {
+        try {
+            await dbDisconnect(conn);
+        } catch (err) {
+        }
+    }
+}
+
+export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas };

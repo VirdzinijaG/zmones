@@ -9,13 +9,14 @@
         <td>
             {{this.reiksme}}
         </td>
+        <td>
+            <a href="/zmones/{{../zmogus.id}}/kontaktai/{{this.id}}">Atnaujinti kontakta</a>
         </td>
         <td>
-            <a href="/zmones/{{zmogus.id}}/kontaktai/{{this.id}}/delete">Istrinti kontakta</a>
+            <a href="/zmones/{{../zmogus.id}}/kontaktai/{{this.id}}/delete">Istrinti kontakta</a>
         </td>
     </tr>
     {{/each}}
 </table>
 <a href="/zmones/{{zmogus.id}}/kontaktai/naujas">Prideti nauja kontakta</a> <br>
-<a href="/zmones/{{zmogus.id}}/kontaktai/{{this.id}}">Atnaujinti kontaktus</a> <br>
 <a href="/zmones">Atgal i sarasa</a>

@@ -1,7 +1,7 @@
 import { default as express } from "express";
 import exphbs from "express-handlebars";
 
-import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai } from "./db.js";
+import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas } from "./db.js";
 
 const app = express(); // paleidziama funkcija is node_modules
 const hbs = exphbs({
@@ -129,7 +129,7 @@ app.get("/zmones/:id/kontaktai", async (req, res) => {
             res.render("kontaktai", { // generuojamas views
                 zmogus: zmones[0],
                 kontaktai
-            }); 
+            });
         } else {
             res.redirect("/zmones");
         }
@@ -138,6 +138,46 @@ app.get("/zmones/:id/kontaktai", async (req, res) => {
         res.status(500).send(err);
     }
 });
+app.get("/zmones/:id/kontaktai/naujas", async (req, res) => {
+    res.type("text/html");
+    try {
+        const zmones = await getZmogus(req.params.id);
+        if (zmones.length > 0) {
+            res.render("kontaktas", {
+                zmogus: zmones[0],
+            });
+        } else {
+            res.redirect("/zmones");
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+app.get("/zmones/:zmogusId/kontaktai/:id", async (req, res) => {
+    res.type("text/html");
+    try {
+        const zmones = await getZmogus(req.params.zmogusId);
+        if (zmones.length > 0) {
+            const kontaktai = await getKontaktas(req.params.id, req.params.zmogusId);
+            if (kontaktai.length > 0) {
+                res.render("kontaktas", {
+                    zmogus: zmones[0],
+                    kontaktas: kontaktai[0],
+                });
+            } else {
+                res.redirect(`/zmones/${req.params.zmogusId}/kontaktai`);
+            }
+        } else {
+            res.redirect("/zmones");
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
 
 app.listen(port, () => { // narsykles port
     console.log(`Example app listening at http://localhost:${port}`);
