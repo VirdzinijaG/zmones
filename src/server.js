@@ -4,7 +4,18 @@ import exphbs from "express-handlebars";
 import { getZmones } from "./db.js";
 
 const app = express(); // paleidziama funkcija is node_modules
-app.engine("handlebars", exphbs());
+const hbs = exphbs({
+    helpers: {
+        dateFormat(d) {
+            if (d instanceof Date) {
+                return d.toISOString().substring(0, 10);
+            } else {
+                return d;
+            }
+        }
+    }
+})
+app.engine("handlebars", hbs);
 app.set("view engine", "handlebars");
 
 const port = 3000;
