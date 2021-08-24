@@ -1,0 +1,21 @@
+{{ zmogus.vardas }} {{ zmogus.pavarde }} kontaktu sarasas <br>
+
+<table>
+    {{#each kontaktai}} {{! eina per sarasa kontaktai!}}
+    <tr>
+        <td>
+            {{this.tipas}}
+        </td>
+        <td>
+            {{this.reiksme}}
+        </td>
+        </td>
+        <td>
+            <a href="/zmones/{{zmogus.id}}/kontaktai/{{this.id}}/delete">Istrinti kontakta</a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+<a href="/zmones/{{zmogus.id}}/kontaktai/naujas">Prideti nauja kontakta</a> <br>
+<a href="/zmones/{{zmogus.id}}/kontaktai/{{this.id}}">Atnaujinti kontaktus</a> <br>
+<a href="/zmones">Atgal i sarasa</a>

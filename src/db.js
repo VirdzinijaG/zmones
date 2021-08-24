@@ -139,4 +139,27 @@ async function deleteZmogus(id) {
     }
 }
 
-export { getZmones, getZmogus, saveZmogus, deleteZmogus };
+async function getKontaktai(zmogusId) { 
+    zmogusId = parseInt(zmogusId);
+    if (isFinite(zmogusId)) {
+        let conn;
+        try {
+            conn = await dbConnect();
+            let r = await dbQuery(
+                conn,
+                "select id, tipas, reiksme from kontaktai where zmones_id = ?",
+                [zmogusId],
+            );
+            return r.results;
+        } finally {
+            try {
+                await dbDisconnect(conn);
+            } catch (err) {
+            }
+        }
+    } else {
+        throw new Error("Bad id");
+    }
+}
+
+export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai };
