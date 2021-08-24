@@ -8,11 +8,4 @@
     Alga: <input type="text" name="alga" value="{{ alga }}"><br>
     <input type="submit" value="Save">
 </form>
-<form action="/zmones/trinti" method="GET">
-    {{#if id}}
-    <input type="hidden" name="id" value="{{id}}">
-    {{/if}}
-    Id: <input type="text" name="id" value="{{ id }}">
-    <input type="submit" value="Delete">
-</form>
 <a href="/zmones">Back</a>

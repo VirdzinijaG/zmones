@@ -128,7 +128,6 @@ async function deleteZmogus(id) {
                 "delete from zmones where id = ?",
                 [id],
             );
-            return r.results;
         } finally {
             try {
                 await dbDisconnect(conn);

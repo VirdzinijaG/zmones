@@ -47,26 +47,6 @@ app.get("/zmones/naujas", async (req, res) => {
     }
 });
 
-app.get("/zmones/trinti", async (req, res) => {
-    res.type("text/html");
-    try {
-        res.render("zmogus", {});
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
-
-app.delete("/zmones/trinti", async (req, res) => {
-    res.type("text/html");
-    try {
-        res.render("zmogus", zmones[0]);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-});
-
 app.get("/zmones/:id", async (req, res) => {
     res.type("text/html");
     try {
@@ -112,6 +92,18 @@ app.post("/zmones/save", async (req, res) => {
             req.body.gimimoData,
             req.body.alga,
         );
+        res.redirect("/zmones");
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+app.get("/zmones/:id/delete", async (req, res) => {
+    res.type("text/html");
+    // console.log("cia tureciau istrinti zmogu su id: " + req.params.id);
+    try {
+        await deleteZmogus(req.params.id);
         res.redirect("/zmones");
     } catch (err) {
         console.log(err);
