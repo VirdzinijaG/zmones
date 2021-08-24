@@ -1,7 +1,7 @@
 import { default as express } from "express";
 import exphbs from "express-handlebars";
 
-import { getZmones, getZmogus, saveZmogus } from "./db.js";
+import { getZmones, getZmogus, saveZmogus, deleteZmogus } from "./db.js";
 
 const app = express(); // paleidziama funkcija is node_modules
 const hbs = exphbs({
@@ -41,6 +41,26 @@ app.get("/zmones/naujas", async (req, res) => {
     res.type("text/html");
     try {
         res.render("zmogus", {});
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+app.get("/zmones/trinti", async (req, res) => {
+    res.type("text/html");
+    try {
+        res.render("zmogus", {});
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+app.delete("/zmones/trinti", async (req, res) => {
+    res.type("text/html");
+    try {
+        res.render("zmogus", zmones[0]);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -98,6 +118,7 @@ app.post("/zmones/save", async (req, res) => {
         res.status(500).send(err);
     }
 });
+
 
 app.listen(port, () => { // narsykles port
     console.log(`Example app listening at http://localhost:${port}`);

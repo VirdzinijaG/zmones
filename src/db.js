@@ -67,7 +67,7 @@ async function getZmones() {
     }
 }
 
-async function getZmogus(id) {
+async function getZmogus(id) { // rodoma zmogaus infromacija pagal id
     id = parseInt(id);
     if (isFinite(id)) {
         let conn;
@@ -117,4 +117,27 @@ async function saveZmogus(id, vardas, pavarde, gimimoData, alga) {
     }
 }
 
-export { getZmones, getZmogus, saveZmogus };
+async function deleteZmogus(id) {
+    id = parseInt(id);
+    if (isFinite(id)) {
+        let conn;
+        try {
+            conn = await dbConnect();
+            let r = await dbQuery(
+                conn,
+                "delete from zmones where id = ?",
+                [id],
+            );
+            return r.results;
+        } finally {
+            try {
+                await dbDisconnect(conn);
+            } catch (err) {
+            }
+        }
+    } else {
+        throw new Error("Bad id");
+    }
+}
+
+export { getZmones, getZmogus, saveZmogus, deleteZmogus };
