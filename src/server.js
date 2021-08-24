@@ -74,15 +74,24 @@ app.post("/zmones/save", async (req, res) => {
         res.redirect("/zmones");
         return;
     }
-    req.body.gimimoData = new Date(req.body.gimimoData);
-    if (!isFinite(req.body.gimimoData.getTime())) {
-        res.redirect("/zmones");
-        return;
+
+    if (req.body.gimimoData === "") {
+        req.body.gimimoData = null;
+    } else {
+        req.body.gimimoData = new Date(req.body.gimimoData);
+        if (!isFinite(req.body.gimimoData.getTime())) {
+            res.redirect("/zmones");
+            return;
+        }
     }
-    req.body.alga = parseFloat(req.body.alga);
-    if (!isFinite(req.body.alga)) {
-        res.redirect("/zmones");
-        return;
+    if (req.body.alga === "") {
+        req.body.alga = null;
+    } else {
+        req.body.alga = parseFloat(req.body.alga);
+        if (!isFinite(req.body.alga)) {
+            res.redirect("/zmones");
+            return;
+        }
     }
     try {
         await saveZmogus(
