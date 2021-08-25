@@ -160,7 +160,7 @@ app.get("/zmones/:zmogusId/kontaktai/:id", async (req, res) => {
     try {
         const zmones = await getZmogus(req.params.zmogusId);
         if (zmones.length > 0) {
-            const kontaktai = await getKontaktas(req.params.id, req.params.zmogusId);
+            const kontaktai = await getKontaktas(req.params.id, req.params.zmogusId); // tikrinamas id, kad sutaptu ir neleistu, redaguoti kontakto, jei id ne toks
             if (kontaktai.length > 0) {
                 res.render("kontaktas", {
                     zmogus: zmones[0],

@@ -169,14 +169,14 @@ async function getKontaktas(id, zmogusId) {
     }
     zmogusId = parseInt(zmogusId);
     if (!isFinite(zmogusId)) {
-        throw new Error("Bad zmogusId");
+        throw new Error("Bad zmogusId"); // po throw jei yra klaida niekas nebevyksta
     }
     let conn;
     try {
         conn = await dbConnect();
         let r = await dbQuery(
-            conn,
-            "select id, tipas, reiksme from kontaktai where id = ? and zmones_id = ?",
+            conn, // jei id sutampa vykdoma salyga
+            "select id, tipas, reiksme from kontaktai where id = ? and zmones_id = ?", // id turi sutapti 
             [id, zmogusId],
         );
         return r.results;
