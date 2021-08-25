@@ -215,4 +215,28 @@ async function saveKontaktas(id, zmogusId, tipas, reiksme) {
     }
 }
 
-export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas };
+async function deleteKontaktas(id, zmogusId) {
+    id = parseInt(id);
+    zmogusId = parseInt(zmogusId);
+    if (isFinite(id) && isFinite(zmogusId)) {
+        let conn;
+        try {
+            conn = await dbConnect();
+            let r = await dbQuery(
+                conn,
+                "delete from kontaktai where id = ? and zmones_id = ?",
+                [id, zmogusId],
+            );
+        } finally {
+            try {
+                await dbDisconnect(conn);
+            } catch (err) {
+            }
+        }
+    } else {
+        throw new Error("Bad id");
+    }
+}
+
+
+export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas, deleteKontaktas };

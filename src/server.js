@@ -1,7 +1,7 @@
 import { default as express } from "express";
 import exphbs from "express-handlebars";
 
-import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas } from "./db.js";
+import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas, deleteKontaktas } from "./db.js";
 
 const app = express(); // paleidziama funkcija is node_modules
 const hbs = exphbs({
@@ -188,6 +188,17 @@ app.post("/zmones/:zmogusId/kontaktai/save", async (req, res) => {
         } else {
             res.redirect("/zmones");
         }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
+app.get("/zmones/:zmogusId/kontaktai/:id/delete", async (req, res) => {
+    res.type("text/html");
+    try {
+        await deleteKontaktas(req.params.id, req.params.zmogusId);
+        res.redirect(`/zmones/${req.params.zmogusId}/kontaktai`);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
