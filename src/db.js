@@ -188,4 +188,31 @@ async function getKontaktas(id, zmogusId) {
     }
 }
 
-export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas };
+async function saveKontaktas(id, zmogusId, tipas, reiksme) {
+    let conn;
+    try {
+        conn = await dbConnect();
+        if (id) {
+            let r = await dbQuery(
+                conn,
+                "update kontaktai set tipas = ?, reiksme = ? where id = ? and zmones_id = ?;", // atnaujinamas kontaktas, su id patikrinimu
+                [tipas, reiksme, id, zmogusId],
+            );
+            return r.results;
+        } else {
+            let r = await dbQuery(
+                conn,
+                "insert into kontaktai (zmones_id, tipas, reiksme) values (?, ?, ?);", // irasomas naujas kontaktas
+                [zmogusId, tipas, reiksme],
+            );
+            return r.results;
+        }
+    } finally {
+        try {
+            await dbDisconnect(conn);
+        } catch (err) {
+        }
+    }
+}
+
+export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas };

@@ -6,7 +6,7 @@ naujo kontakto sukurimas
 {{/if}}
 <br>
 
-<form action="/zmones/{{zmogus.id}}/kontaktai/save" method="POST">
+<form action="/zmones/{{zmogus.id}}/kontaktai/save" method="POST"> {{! pagal zmogaus id zinos, kuriam keiciamas kontaktas!}}
     {{#if kontaktas}}
     <input type="hidden" name="id" value="{{kontaktas.id}}">
     {{/if}}

@@ -1,7 +1,7 @@
 import { default as express } from "express";
 import exphbs from "express-handlebars";
 
-import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas } from "./db.js";
+import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas } from "./db.js";
 
 const app = express(); // paleidziama funkcija is node_modules
 const hbs = exphbs({
@@ -178,6 +178,21 @@ app.get("/zmones/:zmogusId/kontaktai/:id", async (req, res) => {
     }
 });
 
+app.post("/zmones/:zmogusId/kontaktai/save", async (req, res) => {
+    res.type("text/html");
+    try {
+        const zmones = await getZmogus(req.params.zmogusId); // tikrinama ar yra toks zmogus
+        if (zmones.length > 0) {
+            await saveKontaktas(req.body.id, req.params.zmogusId, req.body.tipas, req.body.reiksme);
+            res.redirect(`/zmones/${req.params.zmogusId}/kontaktai`);
+        } else {
+            res.redirect("/zmones");
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
 
 app.listen(port, () => { // narsykles port
     console.log(`Example app listening at http://localhost:${port}`);
