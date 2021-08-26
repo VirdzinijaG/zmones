@@ -21,10 +21,10 @@ app.set("view engine", "handlebars");
 const port = 3000;
 
 app.use(express.static("web")); // tikrina ar web direktorijoje yra failai, pats automatiskai perskaito
-app.use(express.json()); // ateina duomenys json 
 app.use(express.urlencoded({ // analizuoja gaunamas uzklausas // kai ateina postas (save) uzpildys req.body
     extended: true
 }));
+app.use(express.json()); // ateina duomenys json 
 
 app.get("/zmones", async (req, res) => {
     res.type("text/html");
@@ -222,9 +222,10 @@ app.get("/zmones/:zmogusId/kontaktai/:id/delete", async (req, res) => {
 //     }
 //   });
 
-
+// duomenu perdavimas  naudojant json
+// grazins ne html jau, o tik zmoniu sarasa 
 app.get("/json/zmones", async (req, res) => {
-    res.type("aplication/json");
+    res.type("application/json");
     try {
         const zmones = await getZmones();
         res.send(JSON.stringify(zmones));
