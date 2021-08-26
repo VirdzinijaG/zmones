@@ -1,0 +1,22 @@
+{{ zmogus.vardas }} {{ zmogus.pavarde }} kontaktu sarasas<br>
+
+<a href="/zmones/{{zmogus.id}}/kontaktai/naujas">Naujas</a>
+<table>
+    {{#each kontaktai}}
+    <tr>
+        <td>
+            {{this.tipas}}
+        </td>
+        <td>
+            {{this.reiksme}}
+        </td>
+        <td>
+            <a href="/zmones/{{../zmogus.id}}/kontaktai/{{this.id}}">edit</a>
+        </td>
+        <td>
+            <a href="/zmones/{{../zmogus.id}}/kontaktai/{{this.id}}/delete">X</a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+<a href="/zmones">Back</a>
