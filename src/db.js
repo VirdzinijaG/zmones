@@ -238,5 +238,31 @@ async function deleteKontaktas(id, zmogusId) {
     }
 }
 
+// parodytas per pamoka
+// async function deleteKontaktas(id, zmogusId) {
+//     id = parseInt(id);
+//     if (!isFinite(id)) {
+//       throw new Error("Bad id");
+//     }
+//     zmogusId = parseInt(zmogusId);
+//     if (!isFinite(zmogusId)) {
+//       throw new Error("Bad zmogusId");
+//     }
+//     let conn;
+//     try {
+//       conn = await dbConnect();
+//       let r = await dbQuery(
+//         conn,
+//         "delete from kontaktai where id = ? and zmones_id = ?",
+//         [id, zmogusId],
+//       );
+//     } finally {
+//       try {
+//         await dbDisconnect(conn);
+//       } catch (err) {
+//         // ignored
+//       }
+//     }
+//   }
 
 export { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas, deleteKontaktas };

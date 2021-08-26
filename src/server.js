@@ -205,6 +205,23 @@ app.get("/zmones/:zmogusId/kontaktai/:id/delete", async (req, res) => {
     }
 });
 
+// parodytas per pamoka
+// app.get("/zmones/:zmogusId/kontaktai/:id/delete", async (req, res) => {
+//     res.type("text/html");
+//     try {
+//       const zmones = await getZmogus(req.params.zmogusId);
+//       if (zmones.length > 0) {
+//         await deleteKontaktas(req.params.id, req.params.zmogusId);
+//         res.redirect(`/zmones/${req.params.zmogusId}/kontaktai`);
+//       } else {
+//         res.redirect("/zmones");
+//       }
+//     } catch (err) {
+//       console.log(err);
+//       res.status(500).send(err);
+//     }
+//   });
+
 
 app.get("/json/zmones", async (req, res) => {
     res.type("aplication/json");
