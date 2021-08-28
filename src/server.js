@@ -1,4 +1,4 @@
-import { default as express, json } from "express";
+import { default as express, json, response } from "express";
 import exphbs from "express-handlebars";
 
 import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas, deleteKontaktas } from "./db.js";
@@ -248,6 +248,19 @@ app.get("/json/zmones/:id", async (req, res) => {
         } else {
             res.send(JSON.stringify(null));
         }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err
+        }));
+    }
+});
+
+app.delete("/json/zmones/:id", async (req, res) => { // app.delete istrinimui
+    res.type("application/json");
+    try {
+        const zmones = await deleteZmogus(req.params.id);
+        res.status(204).end(); // http status code // 204 no content
     } catch (err) {
         console.log(err);
         res.status(500).send(JSON.stringify({

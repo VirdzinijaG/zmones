@@ -85,6 +85,28 @@ async function getZmogus() {
     }
 }
 
+async function deleteZmogus() {
+    let id = parseInt(document.getElementById("id").value);
+    if (!isFinite(id)) {
+        return;
+    }
+    try {
+        const res = await fetch("/json/zmones/" + id, {
+            method: "DELETE" // funkcijai delete prie fetch pridedamas objektas su metodu delete
+        });
+        if (res.ok) {
+            // const div = document.getElementById("zmones");
+            // div.appendChild(document.createTextNode("Istrintas zmogus su id:" + id));
+            getZmones();
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    }
+    catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+}
+
 
 
 function cleanNode(node) { // funkcija, kad nepridedu vis po nauja lentele paspaudus Get Data
