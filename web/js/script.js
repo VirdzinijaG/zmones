@@ -107,6 +107,36 @@ async function deleteZmogus() {
     }
 }
 
+async function addZmogus() {
+    // alert("tipo naujas");
+    const vardas = document.getElementById("vardas").value;
+    const pavarde = document.getElementById("pavarde").value;
+    const alga = parseInt(document.getElementById("alga").value);
+    const zmogus = {
+        vardas,
+        pavarde,
+        alga
+    }
+    try {
+        const res = await fetch("/json/zmones/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json" // objektas, kuris bus siunciams - json
+            },
+            body: JSON.stringify(zmogus) // tai kas siunciama i serveri
+        });
+        if (res.ok) {
+            getZmones();
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    }
+    catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+    console.log(zmogus);
+}
+
 
 
 function cleanNode(node) { // funkcija, kad nepridedu vis po nauja lentele paspaudus Get Data

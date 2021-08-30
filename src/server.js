@@ -269,6 +269,51 @@ app.delete("/json/zmones/:id", async (req, res) => { // app.delete istrinimui
     }
 });
 
+app.post("/json/zmones", async (req, res) => { // metodas post
+    res.type("application/json");
+    if (typeof req.body.vardas !== "string" || req.body.vardas.trim() === "") {
+        res.status(400).end();
+        return;
+    }
+    if (typeof req.body.pavarde !== "string" || req.body.pavarde.trim() === "") {
+        res.status(400).end();
+        return;
+    }
+    if (!req.body.gimimoData) {
+        req.body.gimimoData = null;
+    } else {
+        req.body.gimimoData = new Date(req.body.gimimoData);
+        if (!isFinite(req.body.gimimoData.getTime())) {
+            res.status(400).end();
+            return;
+        }
+    }
+    if (!req.body.alga) {
+        req.body.gimimoData = null;
+    } else {
+        req.body.alga = parseFloat(req.body.alga);
+        if (!isFinite(req.body.alga)) {
+            res.status(400).end();
+            return;
+        }
+    }
+    try {
+        await saveZmogus(
+            req.body.id,
+            req.body.vardas,
+            req.body.pavarde,
+            req.body.gimimoData,
+            req.body.alga,
+        );
+        res.status(201).end(); // status 201 - created
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err
+        }));
+    }
+})
+
 
 app.listen(port, () => { // narsykles port
     console.log(`Example app listening at http://localhost:${port}`);
