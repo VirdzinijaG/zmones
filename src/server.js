@@ -1,4 +1,4 @@
-import { default as express, json, response } from "express";
+import { default as express } from "express";
 import exphbs from "express-handlebars";
 
 import { getZmones, getZmogus, saveZmogus, deleteZmogus, getKontaktai, getKontaktas, saveKontaktas, deleteKontaktas } from "./db.js";
@@ -275,7 +275,9 @@ app.post("/json/zmones", async (req, res) => { // metodas post
         res.status(400).end();
         return;
     }
-    if (typeof req.body.pavarde !== "string" || req.body.pavarde.trim() === "") {
+    if (
+        typeof req.body.pavarde !== "string" || req.body.pavarde.trim() === ""
+    ) {
         res.status(400).end();
         return;
     }
@@ -289,7 +291,7 @@ app.post("/json/zmones", async (req, res) => { // metodas post
         }
     }
     if (!req.body.alga) {
-        req.body.gimimoData = null;
+        req.body.alga = null;
     } else {
         req.body.alga = parseFloat(req.body.alga);
         if (!isFinite(req.body.alga)) {
@@ -305,14 +307,62 @@ app.post("/json/zmones", async (req, res) => { // metodas post
             req.body.gimimoData,
             req.body.alga,
         );
-        res.status(201).end(); // status 201 - created
+        res.status(201).end();
     } catch (err) {
         console.log(err);
         res.status(500).send(JSON.stringify({
             err
         }));
     }
-})
+});
+
+app.put("/json/zmones/:id", async (req, res) => {
+    res.type("application/json");
+    if (typeof req.body.vardas !== "string" || req.body.vardas.trim() === "") {
+        res.status(400).end();
+        return;
+    }
+    if (
+        typeof req.body.pavarde !== "string" || req.body.pavarde.trim() === ""
+    ) {
+        res.status(400).end();
+        return;
+    }
+    if (!req.body.gimimoData) {
+        req.body.gimimoData = null;
+    } else {
+        req.body.gimimoData = new Date(req.body.gimimoData);
+        if (!isFinite(req.body.gimimoData.getTime())) {
+            res.status(400).end();
+            return;
+        }
+    }
+    if (!req.body.alga) {
+        req.body.alga = null;
+    } else {
+        req.body.alga = parseFloat(req.body.alga);
+        if (!isFinite(req.body.alga)) {
+            res.status(400).end();
+            return;
+        }
+    }
+    try {
+        await saveZmogus(
+            req.params.id,
+            req.body.vardas,
+            req.body.pavarde,
+            req.body.gimimoData,
+            req.body.alga,
+        );
+        res.status(201).end();
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err
+        }));
+    }
+});
+
 
 
 app.listen(port, () => { // narsykles port

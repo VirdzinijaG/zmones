@@ -160,23 +160,30 @@ async function addZmogus() {
 }
 
 async function updateZmogus() {
-    alert("tipo update");
-    return;
+    // alert("tipo update");
+    // return;
+    let id = parseInt(document.getElementById("id").value);
+    if (!isFinite(id)) {
+        return;
+    }
     const vardas = document.getElementById("vardas").value;
     const pavarde = document.getElementById("pavarde").value;
+    const gimimoData = document.getElementById("gimimoData").value;
     const alga = parseInt(document.getElementById("alga").value);
     const zmogus = {
+        id,
         vardas,
         pavarde,
+        gimimoData,
         alga
-    }
+    };
     try {
-        const res = await fetch("/json/zmones/", {
-            method: "POST",
+        const res = await fetch("/json/zmones/" + id, {
+            method: "PUT",
             headers: {
-                "Content-Type": "application/json" // objektas, kuris bus siunciams - json
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify(zmogus) // tai kas siunciama i serveri
+            body: JSON.stringify(zmogus)
         });
         if (res.ok) {
             getZmones();
@@ -187,7 +194,6 @@ async function updateZmogus() {
     catch (err) {
         console.log("Klaida gaunant duomenis is serverio", err);
     }
-    console.log(zmogus);
 }
 
 
