@@ -22,7 +22,13 @@ async function getZmones() {
                 tr.appendChild(td);
                 td = document.createElement("td");
                 if (zmogus.gimimoData) { // rasomos reiksmes, kai jos yra pateiktos, o null nerasys
-                    td.appendChild(document.createTextNode(zmogus.gimimoData.substring(0, 10))); // substring, imamos reiksmes nuo 0 iki 10, data tvarkingai rasoma
+                    const d = new Date(zmogus.gimimoData);
+                    let month = "00" + (d.getMonth() + 1);
+                    month = month.substring(month.length - 2);
+                    let day = "00" + d.getDate();
+                    day = day.substring(day.length - 2);
+                    zmogus.gimimoData = `${d.getFullYear()}-${month}-${day}`;
+                    td.appendChild(document.createTextNode(zmogus.gimimoData));
                 }
                 tr.appendChild(td);
                 td = document.createElement("td");
@@ -72,8 +78,14 @@ async function getZmogus() {
                 div.appendChild(document.createElement("br"));
                 div.appendChild(document.createTextNode("Gimimo data:"));
                 if (zmogus.gimimoData) {
-                    div.appendChild(document.createTextNode(zmogus.gimimoData.substring(0, 10)))
-                    document.getElementById("gimimoData").value = new Date(zmogus.gimimoData)
+                    const d = new Date(zmogus.gimimoData);
+                    let month = "00" + (d.getMonth() + 1);
+                    month = month.substring(month.length - 2);
+                    let day = "00" + d.getDate();
+                    day = day.substring(day.length - 2);
+                    zmogus.gimimoData = `${d.getFullYear()}-${month}-${day}`;
+                    div.appendChild(document.createTextNode(zmogus.gimimoData));
+                    document.getElementById("gimimoData").value = zmogus.gimimoData;
                 }
                 div.appendChild(document.createElement("br"));
                 div.appendChild(document.createTextNode("Alga:"));
@@ -119,7 +131,7 @@ async function addZmogus() {
     // alert("tipo naujas");
     const vardas = document.getElementById("vardas").value;
     const pavarde = document.getElementById("pavarde").value;
-    const gimimoData = parseInt(document.getElementById("gimimoData").value);
+    const gimimoData = document.getElementById("gimimoData").value;
     const alga = parseInt(document.getElementById("alga").value);
     const zmogus = {
         vardas,
@@ -145,28 +157,6 @@ async function addZmogus() {
         console.log("Klaida gaunant duomenis is serverio", err);
     }
     console.log(zmogus);
-}
-
-async function deleteZmogus() {
-    let id = parseInt(document.getElementById("id").value);
-    if (!isFinite(id)) {
-        return;
-    }
-    try {
-        const res = await fetch("/json/zmones/" + id, {
-            method: "DELETE" // funkcijai delete prie fetch pridedamas objektas su metodu delete
-        });
-        if (res.ok) {
-            // const div = document.getElementById("zmones");
-            // div.appendChild(document.createTextNode("Istrintas zmogus su id:" + id));
-            getZmones();
-        } else {
-            console.log("Uzklausa is serverio atejo su klaida", res.status);
-        }
-    }
-    catch (err) {
-        console.log("Klaida gaunant duomenis is serverio", err);
-    }
 }
 
 async function updateZmogus() {
