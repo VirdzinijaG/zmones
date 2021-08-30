@@ -54,24 +54,32 @@ async function getZmogus() {
             const zmogus = await res.json();
             const div = document.getElementById("zmones");
             cleanNode(div);
+            document.getElementById("vardas").value = "";
+            document.getElementById("pavarde").value = "";
+            document.getElementById("alga").value = "";
+            document.getElementById("gimimoData").value = "";
             if (zmogus) {
                 div.appendChild(document.createTextNode("ID:"));
                 div.appendChild(document.createTextNode(zmogus.id));
                 div.appendChild(document.createElement("br"));
                 div.appendChild(document.createTextNode("Vardas:"));
                 div.appendChild(document.createTextNode(zmogus.vardas));
+                document.getElementById("vardas").value = zmogus.vardas;
                 div.appendChild(document.createElement("br"));
                 div.appendChild(document.createTextNode("Pavarde:"));
                 div.appendChild(document.createTextNode(zmogus.pavarde));
+                document.getElementById("pavarde").value = zmogus.pavarde;
                 div.appendChild(document.createElement("br"));
                 div.appendChild(document.createTextNode("Gimimo data:"));
                 if (zmogus.gimimoData) {
                     div.appendChild(document.createTextNode(zmogus.gimimoData.substring(0, 10)))
+                    document.getElementById("gimimoData").value = new Date(zmogus.gimimoData)
                 }
                 div.appendChild(document.createElement("br"));
                 div.appendChild(document.createTextNode("Alga:"));
                 if (zmogus.alga) {
                     div.appendChild(document.createTextNode(zmogus.alga));
+                    document.getElementById("alga").value = zmogus.alga;
                 }
                 div.appendChild(document.createElement("br"));
             }
@@ -111,6 +119,61 @@ async function addZmogus() {
     // alert("tipo naujas");
     const vardas = document.getElementById("vardas").value;
     const pavarde = document.getElementById("pavarde").value;
+    const gimimoData = parseInt(document.getElementById("gimimoData").value);
+    const alga = parseInt(document.getElementById("alga").value);
+    const zmogus = {
+        vardas,
+        pavarde,
+        gimimoData,
+        alga
+    }
+    try {
+        const res = await fetch("/json/zmones/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json" // objektas, kuris bus siunciams - json
+            },
+            body: JSON.stringify(zmogus) // tai kas siunciama i serveri
+        });
+        if (res.ok) {
+            getZmones();
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    }
+    catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+    console.log(zmogus);
+}
+
+async function deleteZmogus() {
+    let id = parseInt(document.getElementById("id").value);
+    if (!isFinite(id)) {
+        return;
+    }
+    try {
+        const res = await fetch("/json/zmones/" + id, {
+            method: "DELETE" // funkcijai delete prie fetch pridedamas objektas su metodu delete
+        });
+        if (res.ok) {
+            // const div = document.getElementById("zmones");
+            // div.appendChild(document.createTextNode("Istrintas zmogus su id:" + id));
+            getZmones();
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    }
+    catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+}
+
+async function updateZmogus() {
+    alert("tipo update");
+    return;
+    const vardas = document.getElementById("vardas").value;
+    const pavarde = document.getElementById("pavarde").value;
     const alga = parseInt(document.getElementById("alga").value);
     const zmogus = {
         vardas,
@@ -136,6 +199,7 @@ async function addZmogus() {
     }
     console.log(zmogus);
 }
+
 
 
 
