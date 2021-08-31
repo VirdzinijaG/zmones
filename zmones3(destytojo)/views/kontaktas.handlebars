@@ -1,0 +1,17 @@
+{{ zmogus.vardas }} {{ zmogus.pavarde }}
+{{#if kontaktas}}
+kontakto redagavimas
+{{else}}
+naujo kontakto sukurimas
+{{/if}}
+<br>
+
+<form action="/zmones/{{zmogus.id}}/kontaktai/save" method="POST">
+    {{#if kontaktas}}
+    <input type="hidden" name="id" value="{{kontaktas.id}}">
+    {{/if}}
+    Tipas: <input type="text" name="tipas" value="{{#if kontaktas}}{{ kontaktas.tipas }}{{/if}}"><br>
+    Reiksme: <input type="text" name="reiksme" value="{{#if kontaktas}}{{ kontaktas.reiksme }}{{/if}}"><br>
+    <input type="submit" value="Save">
+</form>
+<a href="/zmones/{{zmogus.id}}/kontaktai">Back</a>

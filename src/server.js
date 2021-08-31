@@ -363,6 +363,23 @@ app.put("/json/zmones/:id", async (req, res) => {
     }
 });
 
+app.get("/json/zmones/:id/kontaktai", async (req, res) => {
+    res.type("application/json");
+    try {
+        const zmones = await getZmogus(req.params.id);
+        if (zmones.length > 0) {
+            res.send(JSON.stringify(zmones[0]));
+        } else {
+            res.send(JSON.stringify(null));
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err
+        }));
+    }
+});
+
 
 
 app.listen(port, () => { // narsykles port

@@ -1,0 +1,11 @@
+<form action="/zmones/save" method="POST">
+    {{#if id}}
+    <input type="hidden" name="id" value="{{id}}">
+    {{/if}}
+    Vardas: <input type="text" name="vardas" value="{{ vardas }}"><br>
+    Pavarde: <input type="text" name="pavarde" value="{{ pavarde }}"><br>
+    Gimimo data: <input type="date" name="gimimoData" value="{{dateFormat gimimoData}}"><br>
+    Alga: <input type="text" name="alga" value="{{ alga }}"><br>
+    <input type="submit" value="Save">
+</form>
+<a href="/zmones">Back</a>
