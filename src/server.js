@@ -368,18 +368,126 @@ app.get("/json/zmones/:id/kontaktai", async (req, res) => {
     try {
         const zmones = await getZmogus(req.params.id);
         if (zmones.length > 0) {
-            res.send(JSON.stringify(zmones[0]));
+            const kontaktai = await getKontaktai(req.params.id);
+            res.send(JSON.stringify(kontaktai));
         } else {
             res.send(JSON.stringify(null));
         }
     } catch (err) {
         console.log(err);
         res.status(500).send(JSON.stringify({
-            err
+            err,
         }));
     }
 });
 
+app.get("/json/zmones/:zmogusId/kontaktai/:id", async (req, res) => {
+    res.type("application/json");
+    try {
+        const zmones = await getZmogus(req.params.zmogusId);
+        if (zmones.length > 0) {
+            const kontaktai = await getKontaktas(req.params.id, req.params.zmogusId);
+            if (kontaktai.length > 0) {
+                res.send(JSON.stringify(kontaktai[0]));
+            } else {
+                res.send(JSON.stringify(null));
+            }
+        } else {
+            res.send(JSON.stringify(null));
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err,
+        }));
+    }
+});
+app.delete("/json/zmones/:zmogusId/kontaktai/:id", async (req, res) => {
+    res.type("application/json");
+    try {
+        const zmones = await getZmogus(req.params.zmogusId);
+        if (zmones.length > 0) {
+            const kontaktai = await deleteKontaktas(
+                req.params.id,
+                req.params.zmogusId,
+            );
+            res.status(204).end();
+        } else {
+            res.status(404).end();
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err,
+        }));
+    }
+});
+
+app.post("/json/zmones/:zmogusId/kontaktai", async (req, res) => {
+    if (typeof req.body.tipas !== "string" || req.body.tipas.trim() === "") {
+        res.status(400).end();
+        return;
+    }
+    if (
+        typeof req.body.reiksme !== "string" || req.body.reiksme.trim() === ""
+    ) {
+        res.status(400).end();
+        return;
+    }
+    res.type("application/json");
+    try {
+        const zmones = await getZmogus(req.params.zmogusId);
+        if (zmones.length > 0) {
+            await saveKontaktas(
+                null,
+                req.params.zmogusId,
+                req.body.tipas,
+                req.body.reiksme,
+            );
+            res.status(201).end();
+        } else {
+            res.status(404).end();
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err,
+        }));
+    }
+});
+
+app.put("/json/zmones/:zmogusId/kontaktai/:id", async (req, res) => {
+    if (typeof req.body.tipas !== "string" || req.body.tipas.trim() === "") {
+        res.status(400).end();
+        return;
+    }
+    if (
+        typeof req.body.reiksme !== "string" || req.body.reiksme.trim() === ""
+    ) {
+        res.status(400).end();
+        return;
+    }
+    res.type("application/json");
+    try {
+        const zmones = await getZmogus(req.params.zmogusId);
+        if (zmones.length > 0) {
+            const kontaktas = await saveKontaktas(
+                req.params.id,
+                req.params.zmogusId,
+                req.body.tipas,
+                req.body.reiksme,
+            );
+            res.status(204).end();
+        } else {
+            res.status(404).end();
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(JSON.stringify({
+            err,
+        }));
+    }
+});
 
 
 app.listen(port, () => { // narsykles port

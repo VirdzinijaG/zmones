@@ -196,6 +196,164 @@ async function updateZmogus() {
     }
 }
 
+async function getKontaktai() {
+    let zmogusId = parseInt(document.getElementById("zmogusId").value);
+    if (!isFinite(zmogusId)) {
+        return;
+    }
+    try {
+        const res = await fetch("/json/zmones/" + zmogusId + "/kontaktai");
+        if (res.ok) {
+            const data = await res.json();
+            const div = document.getElementById("kontaktai");
+            cleanNode(div);
+            if (data) {
+                const table = document.createElement("table");
+                for (const kontaktas of data) {
+                    const tr = document.createElement("tr");
+                    let td;
+                    td = document.createElement("td");
+                    td.appendChild(document.createTextNode(kontaktas.id));
+                    tr.appendChild(td);
+                    td = document.createElement("td");
+                    td.appendChild(document.createTextNode(kontaktas.tipas));
+                    tr.appendChild(td);
+                    td = document.createElement("td");
+                    td.appendChild(document.createTextNode(kontaktas.reiksme));
+                    tr.appendChild(td);
+                    table.appendChild(tr);
+                }
+                div.appendChild(table);
+            }
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    } catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+}
+
+async function getKontaktas() {
+    let zmogusId = parseInt(document.getElementById("zmogusId").value);
+    if (!isFinite(zmogusId)) {
+        return;
+    }
+    let id = parseInt(document.getElementById("kid").value); // kid kontakto id
+    if (!isFinite(id)) {
+        return;
+    }
+    try {
+        const res = await fetch("/json/zmones/" + zmogusId + "/kontaktai/" + id);
+        if (res.ok) {
+            const kontaktas = await res.json();
+            const div = document.getElementById("kontaktai");
+            cleanNode(div);
+            document.getElementById("tipas").value = "";
+            document.getElementById("reiksme").value = "";
+            if (kontaktas) {
+                div.appendChild(document.createTextNode("ID:"));
+                div.appendChild(document.createTextNode(kontaktas.id));
+                div.appendChild(document.createElement("br"));
+                div.appendChild(document.createTextNode("Tipas:"));
+                div.appendChild(document.createTextNode(kontaktas.tipas));
+                document.getElementById("tipas").value = kontaktas.tipas;
+                div.appendChild(document.createElement("br"));
+                div.appendChild(document.createTextNode("Reiksme:"));
+                div.appendChild(document.createTextNode(kontaktas.reiksme));
+                document.getElementById("reiksme").value = kontaktas.reiksme;
+                div.appendChild(document.createElement("br"));
+            }
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    } catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+}
+async function deleteKontaktas() {
+    let zmogusId = parseInt(document.getElementById("zmogusId").value);
+    if (!isFinite(zmogusId)) {
+        return;
+    }
+    let id = parseInt(document.getElementById("kid").value);
+    if (!isFinite(id)) {
+        return;
+    }
+    try {
+        const res = await fetch("/json/zmones/" + zmogusId + "/kontaktai/" + id, {
+            method: "DELETE",
+        });
+        if (res.ok) {
+            getKontaktai();
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    } catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+}
+
+async function addKontaktas() {
+    let zmogusId = parseInt(document.getElementById("zmogusId").value);
+    if (!isFinite(zmogusId)) {
+        return;
+    }
+    const tipas = document.getElementById("tipas").value;
+    const reiksme = document.getElementById("reiksme").value;
+    const kontaktas = {
+        tipas,
+        reiksme,
+    };
+    try {
+        const res = await fetch("/json/zmones/" + zmogusId + "/kontaktai", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(kontaktas),
+        });
+        if (res.ok) {
+            getKontaktai();
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    } catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+}
+
+async function updateKontaktas() {
+    let zmogusId = parseInt(document.getElementById("zmogusId").value);
+    if (!isFinite(zmogusId)) {
+        return;
+    }
+    let id = parseInt(document.getElementById("kid").value);
+    if (!isFinite(id)) {
+        return;
+    }
+    const tipas = document.getElementById("tipas").value;
+    const reiksme = document.getElementById("reiksme").value;
+    const kontaktas = {
+        tipas,
+        reiksme,
+    };
+    try {
+        const res = await fetch("/json/zmones/" + zmogusId + "/kontaktai/" + id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(kontaktas),
+        });
+        if (res.ok) {
+            getKontaktai();
+        } else {
+            console.log("Uzklausa is serverio atejo su klaida", res.status);
+        }
+    } catch (err) {
+        console.log("Klaida gaunant duomenis is serverio", err);
+    }
+}
 
 
 
